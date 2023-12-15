@@ -1,11 +1,14 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const AppError = require('../utils/AppError');
-const { HTTP_STATUS_CODES } = require('../constants/httpStatusCodes')
+const { HTTP_STATUS_CODES } = require('../constants/httpStatusCodes');
+const { checkBlackList } = require('../utils/blackList');
 
 const assertAuth = async (req, res, next) => {
     try {
         const accessToken = req.headers.authorization?.split(' ')[1] || req.cookies.accessToken;
+
+        await checkBlackList(accessToken, req.cookies.refreshToken);
 
         if (!accessToken && !req.cookies.refreshToken) {
             throw new AppError(HTTP_STATUS_CODES.UNAUTHORIZED, 'Unauthorized');

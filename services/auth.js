@@ -5,6 +5,7 @@ const AppError = require('../utils/AppError');
 const { HTTP_STATUS_CODES } = require('../constants/httpStatusCodes');
 const { validateEmailOrPhoneNumber, checkUsernameAndPassword } = require('../utils/validations');
 const { createAccessAndRefreshToken } = require('../utils/tokens');
+const { addToBlackList } = require('../utils/blackList');
 
 class AuthService {
     async signIn(username, password) {
@@ -56,6 +57,19 @@ class AuthService {
         }
 
         return jwt.sign({ id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10m' });
+    }
+
+    async logout(userId, oldAccessToken, oldRefreshToken, res) {
+        const { accessToken, refreshToken } = createAccessAndRefreshToken(userId);
+        await Promise.all([
+            addToBlackList(oldAccessToken, 'accessToken'),
+            addToBlackList(oldRefreshToken, 'refreshToken')
+        ]);
+
+        res.clearCookie('accessToken');
+        res.clearCookie('refreshToken');
+
+        return { accessToken, refreshToken };
     }
 }
 

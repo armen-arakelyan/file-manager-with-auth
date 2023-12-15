@@ -1,6 +1,6 @@
 const { DataTypes } = require('sequelize');
 const bcrypt = require('bcrypt');
-const sequelize = require('../utils/db'); // Assuming you've set up a database.js file
+const sequelize = require('../utils/db');
 
 const User = sequelize.define('User', {
     username: {
