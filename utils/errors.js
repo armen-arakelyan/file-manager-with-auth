@@ -1,4 +1,5 @@
 const sendResponse = require('./sendResponse');
+const AppError = require('./AppError');
 
 const beautifyValidationErrors = (error) => {
     if (error.name === 'ValidationError') {

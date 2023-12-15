@@ -11,7 +11,7 @@ class AuthController {
     };
 
     async generateTokensFromRefreshToken(req, res) {
-        const accessToken = await authService.generateTokensFromRefreshToken(req.body.refreshToken);
+        const accessToken = await authService.generateTokensFromRefreshToken(req.cookies.refreshToken);
 
         sendResponse(res, HTTP_STATUS_CODES.OK, accessToken);
     };

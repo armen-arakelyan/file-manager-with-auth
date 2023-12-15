@@ -44,12 +44,15 @@ class AuthService {
     }
 
     async generateTokensFromRefreshToken(refreshToken) {
+        if (!refreshToken) {
+            throw new AppError(HTTP_STATUS_CODES.BAD_REQUEST, 'Refresh token is required!');
+        }
         const { id } = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
 
         const user = await User.findByPk(id);
 
         if (!user) {
-            throw new Error('User not found');
+            throw new AppError(HTTP_STATUS_CODES.NOT_FOUND, 'User not found');
         }
 
         return jwt.sign({ id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10m' });
