@@ -3,9 +3,10 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 require('dotenv').config();
-const authRoutes = require('./routes/auth');
 const sequelize = require('./utils/db');
 const toJsonErrors = require('./utils/errors');
+const authRoutes = require('./routes/auth');
+const fileRoutes = require('./routes/file');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -15,6 +16,7 @@ app.use(cors());
 app.use(cookieParser());
 
 app.use(authRoutes);
+app.use('/file', fileRoutes);
 
 app.use(toJsonErrors);
 

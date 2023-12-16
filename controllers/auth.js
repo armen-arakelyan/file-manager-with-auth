@@ -20,7 +20,7 @@ class AuthController {
         const { id, password } = req.body;
         const { accessToken, refreshToken } = authService.signUp(id, password);
 
-        sendResponse(res, HTTP_STATUS_CODES.OK, { accessToken, refreshToken });
+        sendResponse(res, HTTP_STATUS_CODES.CREATED, { accessToken, refreshToken });
     };
 
     info(req, res) {
